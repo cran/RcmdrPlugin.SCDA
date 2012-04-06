@@ -1,0 +1,31 @@
+# Rcmdr Plugin SCDA menu
+
+#   type    menu/item      operation/parent  label                                            command/menu             activation    install?
+
+    menu    scdaMenu       topMenu           ""                                               ""                               ""            "" 
+    item    topMenu        cascade           "SCDA"                                           scdaMenu                         ""            ""
+    menu    scvaMenu       scdaMenu          ""                                               ""                               ""            ""
+    item    scvaMenu       command           "Graphical display..."                           Rcmdr.graph                      ""            "packageAvailable('SCRT')"
+    item    scvaMenu       command           "Plot measure of central tendency..."            Rcmdr.graph.CL                   ""            "packageAvailable('SCVA')"
+    item    scvaMenu       command           "Plot estimate of variability..."                Rcmdr.graph.VAR                  ""            "packageAvailable('SCVA')"
+    item    scvaMenu       command           "Plot estimate of trend..."                      Rcmdr.graph.TREND                ""            "packageAvailable('SCVA')"
+    item    scdaMenu       cascade           "SCVA"                                           scvaMenu                         ""            ""
+    menu    scrtMenu       scdaMenu          ""                                               ""                               ""            ""
+    item    scdaMenu       cascade           "SCRT"                                           scrtMenu                         ""            ""
+    menu    desMenu        scrtMenu          ""                                               ""                               ""            ""
+    item    desMenu        command           "Number of possible assigments..."               Rcmdr.quantity                   ""            "packageAvailable('SCRT')"
+    item    desMenu        command           "Display all possible assigments..."             Rcmdr.assignments                ""            "packageAvailable('SCRT')"
+    item    desMenu        command           "Choose 1 possible assigment..."                 Rcmdr.selectdesign               ""            "packageAvailable('SCRT')"
+    item    scrtMenu       cascade           "Design your experiment"                         desMenu                          ""            ""
+    menu    anMenu         scrtMenu          ""                                               ""                               ""            ""
+    item    anMenu         command           "Observed test statistic..."                     Rcmdr.observed                   ""            "packageAvailable('SCRT')"
+    item    anMenu         command           "Randomization distribution..."                  Rcmdr.distribution               ""            "packageAvailable('SCRT')"
+    item    anMenu         command           "P-value..."                                     Rcmdr.pvalue                     ""            "packageAvailable('SCRT')"
+    item    scrtMenu       cascade           "Analyze your data"                              anMenu                           ""            ""
+    menu    scmaMenu       scdaMenu          ""                                               ""                               ""            ""
+    item    scmaMenu       command           "Calculate effect size..."                       Rcmdr.ES                         ""            "packageAvailable('SCMA')"
+    item    scmaMenu       command           "Combine p-values..."                            Rcmdr.combine                    ""            "packageAvailable('SCMA')"
+    item    scdaMenu       cascade           "SCMA"                                           scmaMenu                         ""            ""
+
+
+    
