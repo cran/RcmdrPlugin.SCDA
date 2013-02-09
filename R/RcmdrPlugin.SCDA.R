@@ -1,15 +1,22 @@
 .onAttach <- function(libname, pkgname){
-        if (!interactive()) return()
-        Rcmdr <- options()$Rcmdr
-        plugins <- Rcmdr$plugins
-        if ((!pkgname %in% plugins) && !getRcmdr("autoRestart")) {
-                Rcmdr$plugins <- c(plugins, pkgname)
+    if (!interactive()) return()
+    Rcmdr <- options()$Rcmdr
+    plugins <- Rcmdr$plugins
+    if (!pkgname %in% plugins) {
+        Rcmdr$plugins <- c(plugins, pkgname)
+        options(Rcmdr=Rcmdr)
+        if("package:Rcmdr" %in% search()) {
+            if(!getRcmdr("autoRestart")) {
                 options(Rcmdr=Rcmdr)
                 closeCommander(ask=FALSE, ask.save=TRUE)
                 Commander()
+            }
         }
+        else {
+            Commander()
+        }
+    }
 }
-
 
 ########################################################################################################
 ##########                                Visual analysis                                     ##########
@@ -21,7 +28,6 @@
 
 Rcmdr.graph <- function(){
 
-  require(tcltk)
   require(SCVA)
   
   initializeDialog(title=gettextRcmdr("Graphical display"))
@@ -30,11 +36,12 @@ Rcmdr.graph <- function(){
   
   getDataFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("dataFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("dataFile", justDoIt(command))
     tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
+    
     if (dataFile == "") return();
   }
-
+  
   onOK <- function(){
 
     des <- getSelection(designBox)
@@ -60,6 +67,7 @@ Rcmdr.graph <- function(){
       command <- paste("graph(design = ",design, ", data = ", .activeDataSet, ")", sep="")
     }
     if (dat == "load") {
+    
       if (exists("dataFile") == 0){
         errorCondition(recall=Rcmdr.graph, message=gettextRcmdr("You must select a data file."))
         return()
@@ -102,7 +110,6 @@ Rcmdr.graph <- function(){
 
 Rcmdr.graph.CL <- function(){
 
-  require(tcltk)
   require(SCVA)
   
   initializeDialog(title=gettextRcmdr("Display central location"))
@@ -115,7 +122,7 @@ Rcmdr.graph.CL <- function(){
 
   getDataFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("dataFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("dataFile", justDoIt(command))
     tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
     if (dataFile == "") return();
   }
@@ -278,7 +285,6 @@ Rcmdr.graph.CL <- function(){
 
 Rcmdr.graph.VAR <- function(){
 
-  require(tcltk)
   require(SCVA)
   
   initializeDialog(title=gettextRcmdr("Display variability"))
@@ -295,7 +301,7 @@ Rcmdr.graph.VAR <- function(){
 
   getDataFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("dataFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("dataFile", justDoIt(command))  
     tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
     if (dataFile == "") return();
   }
@@ -326,7 +332,7 @@ Rcmdr.graph.VAR <- function(){
 
     cl <- getSelection(clBox)
     if (length(cl) == 0){
-      errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select a measure of central tendency."))
+      errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select a measure of central tendency."))
       return()
     }
     if (cl == "Mean") {CL <- paste("\"mean\"")}
@@ -338,7 +344,7 @@ Rcmdr.graph.VAR <- function(){
     trim <- tclvalue(trimVariable)
     if (cl == "Trimmed Mean"){
       if (trim == ""){
-        errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must indicate the % of observations to be removed from the end of the distribution."))
+        errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must indicate the % of observations to be removed from the end of the distribution."))
         return()
       }
     }
@@ -347,7 +353,7 @@ Rcmdr.graph.VAR <- function(){
     mest <- tclvalue(mestVariable)
     if (cl == "M-estimator"){
       if (mest == ""){
-        errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must indicate the value for the constant K."))
+        errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must indicate the value for the constant K."))
         return()
       }
     }
@@ -500,7 +506,6 @@ Rcmdr.graph.VAR <- function(){
 
 Rcmdr.graph.TREND <- function(){
 
-  require(tcltk)
   require(SCVA)
   
   initializeDialog(title=gettextRcmdr("Display trend"))
@@ -517,7 +522,7 @@ Rcmdr.graph.TREND <- function(){
 
   getDataFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("dataFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("dataFile", justDoIt(command))  
     tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
     if (dataFile == "") return();
   }
@@ -552,7 +557,7 @@ Rcmdr.graph.TREND <- function(){
 
     cl <- getSelection(clBox)
     if (length(cl) == 0){
-      errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select a measure of central tendency."))
+      errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select a measure of central tendency."))
       return()
     }
     if (cl == "Mean") {CL <- paste("\"mean\"")}
@@ -564,7 +569,7 @@ Rcmdr.graph.TREND <- function(){
     trim <- tclvalue(trimVariable)
     if (cl == "Trimmed Mean"){
       if (trim == ""){
-        errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must indicate the % of observations to be removed from the end of the distribution."))
+        errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must indicate the % of observations to be removed from the end of the distribution."))
         return()
       }
     }
@@ -573,7 +578,7 @@ Rcmdr.graph.TREND <- function(){
     mest <- tclvalue(mestVariable)
     if (cl == "M-estimator"){
       if (mest == ""){
-        errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must indicate the value for the constant K."))
+        errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must indicate the value for the constant K."))
         return()
       }
     }
@@ -723,7 +728,6 @@ Rcmdr.graph.TREND <- function(){
 
 Rcmdr.quantity <- function(){
 
-  require(tcltk)
   require(SCRT)
   
   initializeDialog(title=gettextRcmdr("Number of possible assignments"))
@@ -734,7 +738,7 @@ Rcmdr.quantity <- function(){
   
   getStartsFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("starts", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("starts", justDoIt(command)) 
     tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
     if (starts == "") return();
   }
@@ -766,7 +770,7 @@ Rcmdr.quantity <- function(){
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.quantity, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
@@ -775,7 +779,7 @@ Rcmdr.quantity <- function(){
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.quantity, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
@@ -855,7 +859,6 @@ Rcmdr.quantity <- function(){
 
 Rcmdr.assignments <- function(){
 
-  require(tcltk)
   require(SCRT)
   
   initializeDialog(title=gettextRcmdr("Display all possible data arrangements"))
@@ -866,14 +869,14 @@ Rcmdr.assignments <- function(){
   
   getStartsFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("starts", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("starts", justDoIt(command))
     tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
     if (starts == "") return();
   }
 
   savefile <- function() {
     command <- "tclvalue(tkgetSaveFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("fileName", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("fileName", justDoIt(command))   
     tkgrid(labelRcmdr(saveFrame, text=gettextRcmdr(fileName)), sticky="w")
     if (fileName == "") return();
   }
@@ -905,7 +908,7 @@ Rcmdr.assignments <- function(){
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.assignments, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
@@ -914,7 +917,7 @@ Rcmdr.assignments <- function(){
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.assignments, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
@@ -1022,7 +1025,6 @@ Rcmdr.assignments <- function(){
 
 Rcmdr.selectdesign <- function(){
 
-  require(tcltk)
   require(SCRT)
 
   initializeDialog(title=gettextRcmdr("Choose 1 data arrangement"))
@@ -1033,7 +1035,7 @@ Rcmdr.selectdesign <- function(){
   
   getStartsFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("starts", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("starts", justDoIt(command))  
     tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
     if (starts == "") return();
   }
@@ -1065,7 +1067,7 @@ Rcmdr.selectdesign <- function(){
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.selectdesign, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
@@ -1074,7 +1076,7 @@ Rcmdr.selectdesign <- function(){
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.selectdesign, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
@@ -1160,7 +1162,6 @@ Rcmdr.selectdesign <- function(){
 
 Rcmdr.observed <- function(){
 
-  require(tcltk)
   require(SCRT)
   
   initializeDialog(title=gettextRcmdr("Observed test statistic"))
@@ -1173,7 +1174,7 @@ Rcmdr.observed <- function(){
 
   getDataFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("dataFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("dataFile", justDoIt(command)) 
     tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
     if (dataFile == "") return();
   }
@@ -1195,7 +1196,7 @@ Rcmdr.observed <- function(){
     
     stat <- getSelection(statisticBox)
     if (length(stat) == 0){
-      errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a test statistic."))
+      errorCondition(recall=Rcmdr.observed, message=gettextRcmdr("You must select a test statistic."))
       return()
     }
     if (stat == "A-B") {statistic <- paste("\"A-B\"")}
@@ -1261,7 +1262,6 @@ Rcmdr.observed <- function(){
 
 Rcmdr.distribution <- function(){
 
-  require(tcltk)
   require(SCRT)
 
   initializeDialog(title=gettextRcmdr("Randomization distribution"))
@@ -1274,21 +1274,21 @@ Rcmdr.distribution <- function(){
 
   getDataFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("dataFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("dataFile", justDoIt(command))  
     tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
     if (dataFile == "") return();
   }
  
   getStartsFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("starts", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("starts", justDoIt(command))  
     tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
     if (starts == "") return();
   }
 
   savefile <- function() {
     command <- "tclvalue(tkgetSaveFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("fileName", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("fileName", justDoIt(command))   
     tkgrid(labelRcmdr(saveFrame, text=gettextRcmdr(fileName)), sticky="w")
     if (fileName == "") return();
   }
@@ -1310,7 +1310,7 @@ Rcmdr.distribution <- function(){
 
     stat <- getSelection(statisticBox)
     if (length(stat) == 0){
-      errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a test statistic."))
+      errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a test statistic."))
       return()
     }
     if (stat == "A-B") {statistic <- paste("\"A-B\"")}
@@ -1572,7 +1572,6 @@ Rcmdr.distribution <- function(){
 
 Rcmdr.pvalue <- function(){
 
-  require(tcltk)
   require(SCRT)
 
   initializeDialog(title=gettextRcmdr("P-value"))
@@ -1585,14 +1584,14 @@ Rcmdr.pvalue <- function(){
 
   getDataFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("dataFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("dataFile", justDoIt(command))  
     tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
     if (dataFile == "") return();
   }
  
   getStartsFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("starts", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("starts", justDoIt(command))
     tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
     if (starts == "") return();
   }
@@ -1632,7 +1631,7 @@ Rcmdr.pvalue <- function(){
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
@@ -1641,7 +1640,7 @@ Rcmdr.pvalue <- function(){
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
@@ -1856,7 +1855,6 @@ Rcmdr.pvalue <- function(){
 
 Rcmdr.ES <- function(){
 
-  require(tcltk)
   require(SCMA)
   
   initializeDialog(title=gettextRcmdr("Effect size"))
@@ -1869,7 +1867,7 @@ Rcmdr.ES <- function(){
 
   getDataFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("dataFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("dataFile", justDoIt(command))  
     tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
     if (dataFile == "") return();
   }
@@ -1891,7 +1889,7 @@ Rcmdr.ES <- function(){
 
     es <- getSelection(esBox)
     if (length(es) == 0){
-      errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select an effect size measure."))
+      errorCondition(recall=Rcmdr.ES, message=gettextRcmdr("You must select an effect size measure."))
       return()
     }
     if (es == "Standardized Mean Difference") {ES <- paste("\"SMD\"")}
@@ -1955,7 +1953,6 @@ Rcmdr.ES <- function(){
 
 Rcmdr.combine <- function(){
 
-  require(tcltk)
   require(SCMA)
   
  
@@ -1963,7 +1960,7 @@ Rcmdr.combine <- function(){
 
   getPvalueFile <- function() {
     command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    assign("pvalueFile", justDoIt(command), envir=.GlobalEnv)
+    putRcmdr("pvalueFile", justDoIt(command))   
     tkgrid(labelRcmdr(pvalFrame, text=gettextRcmdr(pvalueFile)), sticky="w")
     if (pvalueFile == "") return();
   }

@@ -1,2 +1,3 @@
-import(tcltk, SCVA, SCRT, SCMA)
+import(Rcmdr, SCVA, SCRT, SCMA)
+importFrom(tcltk, tkbutton)
 exportPattern("^[^\\.]")
