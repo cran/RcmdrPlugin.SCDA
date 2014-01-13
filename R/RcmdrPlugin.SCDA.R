@@ -28,8 +28,6 @@
 
 Rcmdr.graph <- function(){
 
-  require(SCVA)
-  
   initializeDialog(title=gettextRcmdr("Graphical display"))
   
   designBox <- variableListBox(top, variableList=c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
@@ -110,8 +108,6 @@ Rcmdr.graph <- function(){
 
 Rcmdr.graph.CL <- function(){
 
-  require(SCVA)
-  
   initializeDialog(title=gettextRcmdr("Display central location"))
 
   designBox <- variableListBox(top, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
@@ -284,8 +280,6 @@ Rcmdr.graph.CL <- function(){
 ################################
 
 Rcmdr.graph.VAR <- function(){
-
-  require(SCVA)
   
   initializeDialog(title=gettextRcmdr("Display variability"))
 
@@ -505,8 +499,6 @@ Rcmdr.graph.VAR <- function(){
 ##########################
 
 Rcmdr.graph.TREND <- function(){
-
-  require(SCVA)
   
   initializeDialog(title=gettextRcmdr("Display trend"))
 
@@ -727,8 +719,6 @@ Rcmdr.graph.TREND <- function(){
 ##################################
 
 Rcmdr.quantity <- function(){
-
-  require(SCRT)
   
   initializeDialog(title=gettextRcmdr("Number of possible assignments"))
 
@@ -858,8 +848,6 @@ Rcmdr.quantity <- function(){
 ####################################
 
 Rcmdr.assignments <- function(){
-
-  require(SCRT)
   
   initializeDialog(title=gettextRcmdr("Display all possible data arrangements"))
 
@@ -1025,8 +1013,6 @@ Rcmdr.assignments <- function(){
 
 Rcmdr.selectdesign <- function(){
 
-  require(SCRT)
-
   initializeDialog(title=gettextRcmdr("Choose 1 data arrangement"))
 
   selectionFrame <- tkframe(top)
@@ -1161,8 +1147,6 @@ Rcmdr.selectdesign <- function(){
 ###########################
 
 Rcmdr.observed <- function(){
-
-  require(SCRT)
   
   initializeDialog(title=gettextRcmdr("Observed test statistic"))
 
@@ -1261,8 +1245,6 @@ Rcmdr.observed <- function(){
 ##############################
 
 Rcmdr.distribution <- function(){
-
-  require(SCRT)
 
   initializeDialog(title=gettextRcmdr("Randomization distribution"))
 
@@ -1572,8 +1554,6 @@ Rcmdr.distribution <- function(){
 
 Rcmdr.pvalue <- function(){
 
-  require(SCRT)
-
   initializeDialog(title=gettextRcmdr("P-value"))
 
   selectionFrame <- tkframe(top)
@@ -1854,8 +1834,6 @@ Rcmdr.pvalue <- function(){
 #############################################
 
 Rcmdr.ES <- function(){
-
-  require(SCMA)
   
   initializeDialog(title=gettextRcmdr("Effect size"))
 
@@ -1952,9 +1930,6 @@ Rcmdr.ES <- function(){
 #########################
 
 Rcmdr.combine <- function(){
-
-  require(SCMA)
-  
  
   initializeDialog(title=gettextRcmdr("Combine p-values"))
 

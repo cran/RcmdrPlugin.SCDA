@@ -1,7 +1,7 @@
-14567f77f64b223c7b51a22d7ac273ab *DESCRIPTION
+16861b8e4f44a3b7ef88cb241548f40a *DESCRIPTION
 26fa35fcaca5e6de9b7152a90982641d *NAMESPACE
-afa0960b074de281cf081088541e01dd *R/RcmdrPlugin.SCDA.R
+898d5ab82ebe84480688226a643ac0b5 *R/RcmdrPlugin.SCDA.R
 f9ab5ce044aaf8afcf66b10e49b061d3 *R/globals.R
 f28d92c0400f6f11d98d44de7cfe0133 *inst/etc/menus.txt
 624de866f7a836f7c5bdca9c431732d1 *man/RcmdrPlugin.SCDA-internal.Rd
-8d94ea779024edf04b3744bdf3ec6875 *man/RcmdrPlugin.SCDA-package.Rd
+7fd34634ce72cc26bfaed1d50af4e0ac *man/RcmdrPlugin.SCDA-package.Rd
