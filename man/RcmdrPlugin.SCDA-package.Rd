@@ -21,9 +21,18 @@ License: \tab GPL version 2 or newer\cr
 \author{
 Isis Bulte and Patrick Onghena
 
-Maintainer: Marlies Vervloet <marlies.vervloet@ppw.kuleuven.be>
+Maintainer: Bart Michiels <bart.michiels@ppw.kuleuven.be>
 }
 \seealso{
 \code{\link[Rcmdr]{Rcmdr}}.
 }
+
+\examples{
+scores <- c(10,9,8,10,7,2,5,3,4,5) # Example data
+labels <- c("A","A","A","A","A","B","B","B","B","B")
+d <- data.frame(labels, scores)
+graph(design="AB", data=d)
+pvalue.systematic(design="AB", data=d, limit=1, statistic="A-B")
+}
+
 \keyword{ package }

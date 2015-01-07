@@ -28,23 +28,15 @@
 
 Rcmdr.graph <- function(){
 
-  initializeDialog(title=gettextRcmdr("Graphical display"))
+  initializeDialog(title=c("Graphical display"))
   
-  designBox <- variableListBox(top, variableList=c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
-  
-  getDataFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("dataFile", justDoIt(command))
-    tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
-    
-    if (dataFile == "") return();
-  }
+  designBox <- variableListBox(top, variableList=c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
   
   onOK <- function(){
 
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.graph, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.graph, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -59,7 +51,7 @@ Rcmdr.graph <- function(){
     if (dat == "active") {
       .activeDataSet <- ActiveDataSet()
       if (length(ActiveDataSet()) == 0){
-        errorCondition(recall=Rcmdr.graph, message=gettextRcmdr("You must select an active data set."))
+        errorCondition(recall=Rcmdr.graph, message=c("You must select an active data set."))
         return()
       }
       command <- paste("graph(design = ",design, ", data = ", .activeDataSet, ")", sep="")
@@ -67,7 +59,7 @@ Rcmdr.graph <- function(){
     if (dat == "load") {
     
       if (exists("dataFile") == 0){
-        errorCondition(recall=Rcmdr.graph, message=gettextRcmdr("You must select a data file."))
+        errorCondition(recall=Rcmdr.graph, message=c("You must select a data file."))
         return()
       }
       command <- paste("graph(design = ",design, ", data = read.table(dataFile))", sep="")
@@ -83,7 +75,7 @@ Rcmdr.graph <- function(){
   datFrame <- tkframe(top)
 
   dataFrame <- tkframe(datFrame)
-  radioButtons(dataFrame, name="dataFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title=gettextRcmdr("Select the data file"))
+  radioButtons(dataFrame, name="dataFile", buttons = c("active"), labels = c(c("Use the active data set")), title=c("Select the data file"))
 
   buttonFrame <- tkframe(datFrame)
 
@@ -91,9 +83,8 @@ Rcmdr.graph <- function(){
   tkgrid(labelRcmdr(top, text=""))
  
   tkgrid(dataFileFrame, sticky="w")
-  tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
+  
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getDataFile), sticky="w")
   tkgrid(dataFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
@@ -108,26 +99,19 @@ Rcmdr.graph <- function(){
 
 Rcmdr.graph.CL <- function(){
 
-  initializeDialog(title=gettextRcmdr("Display central location"))
+  initializeDialog(title=c("Display central location"))
 
-  designBox <- variableListBox(top, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  designBox <- variableListBox(top, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
 
   clFrame <- tkframe(top)
 
-  clBox <- variableListBox(clFrame, variableList= c("Mean", "Median", "Broadened median", "Trimmed mean", "M-estimator"), listHeight=4, title=gettextRcmdr("Select the measure of central tendency"))
+  clBox <- variableListBox(clFrame, variableList= c("Mean", "Median", "Broadened median", "Trimmed mean", "M-estimator"), listHeight=4, title=c("Select the measure of central tendency"))
 
-  getDataFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("dataFile", justDoIt(command))
-    tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
-    if (dataFile == "") return();
-  }
-  
   onOK <- function(){
 
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.graph.CL, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -140,7 +124,7 @@ Rcmdr.graph.CL <- function(){
 
     cl <- getSelection(clBox)
     if (length(cl) == 0){
-      errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select a measure of central tendency."))
+      errorCondition(recall=Rcmdr.graph.CL, message=c("You must select a measure of central tendency."))
       return()
     }
     if (cl == "Mean") {CL <- paste("\"mean\"")}
@@ -152,7 +136,7 @@ Rcmdr.graph.CL <- function(){
     trim <- tclvalue(trimVariable)
     if (cl == "Trimmed Mean"){
     if (trim == ""){
-        errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must indicate the % of observations to be removed from the end of the distribution."))
+        errorCondition(recall=Rcmdr.graph.CL, message=c("You must indicate the % of observations to be removed from the end of the distribution."))
         return()
       }
     }
@@ -161,7 +145,7 @@ Rcmdr.graph.CL <- function(){
     mest <- tclvalue(mestVariable)
     if (cl == "M-estimator"){
     if (mest == ""){
-        errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must indicate the value for the constant K."))
+        errorCondition(recall=Rcmdr.graph.CL, message=c("You must indicate the value for the constant K."))
         return()
       }
     }
@@ -173,14 +157,14 @@ Rcmdr.graph.CL <- function(){
       if (dat == "active") {
           .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.CL, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.CL(design = ",design, ", CL = ",CL, ", data = ", .activeDataSet, ")", sep="")
       }
       if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.CL, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.CL(design = ",design, ", CL = ",CL, ", data = read.table(dataFile))", sep="")
@@ -191,14 +175,14 @@ Rcmdr.graph.CL <- function(){
       if (dat == "active") {
           .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.CL, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.CL(design = ",design, ", CL = ",CL, ", tr = ",trim, ", data = ", .activeDataSet, ")", sep="")
       }
       if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.CL, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.CL(design = ",design, ", CL = ",CL, ", tr = ",trim, ", data = read.table(dataFile))", sep="")
@@ -209,14 +193,14 @@ Rcmdr.graph.CL <- function(){
       if (dat == "active") {
           .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.CL, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.CL(design = ",design, ", CL = ",CL, ", tr = ",mest, ", data = ", .activeDataSet, ")", sep="")
       }
       if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.CL, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.CL, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.CL(design = ",design, ", CL = ",CL, ", tr = ",mest, ", data = read.table(dataFile))", sep="")
@@ -243,19 +227,19 @@ Rcmdr.graph.CL <- function(){
   datFrame <- tkframe(top)
 
   dataFrame <- tkframe(datFrame)
-  radioButtons(dataFrame, name="dataFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title=gettextRcmdr("Select the data file"))
+  radioButtons(dataFrame, name="dataFile", buttons = c("active"), labels = c(c("Use the active data set")), title=c("Select the data file"))
 
   buttonFrame <- tkframe(datFrame)
 
   tkgrid(getFrame(designBox), sticky="nw")
   tkgrid(labelRcmdr(top, text=""))
 
-  tkgrid(labelRcmdr(trimFrame, text=gettextRcmdr("For trimmed mean:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(trimFrame, text=gettextRcmdr("% of observations to be removed: ")), trimField, sticky="w")
+  tkgrid(labelRcmdr(trimFrame, text=c("For trimmed mean:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(trimFrame, text=c("% of observations to be removed: ")), trimField, sticky="w")
   tkgrid(trimField, sticky="w")
   tkgrid(labelRcmdr(constantFrame, text=""))
-  tkgrid(labelRcmdr(mestFrame, text=gettextRcmdr("For M-estimator:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(mestFrame, text=gettextRcmdr("Value for the constant K: ")), mestField, sticky="w")
+  tkgrid(labelRcmdr(mestFrame, text=c("For M-estimator:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(mestFrame, text=c("Value for the constant K: ")), mestField, sticky="w")
   tkgrid(mestField, sticky="w")
   tkgrid(trimFrame, sticky = "nw")
   tkgrid(mestFrame, sticky = "nw")
@@ -264,9 +248,8 @@ Rcmdr.graph.CL <- function(){
   tkgrid(labelRcmdr(top, text=""))
 
   tkgrid(dataFileFrame, sticky="w")
-  tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
+  
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getDataFile), sticky="w")
   tkgrid(dataFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
@@ -281,30 +264,23 @@ Rcmdr.graph.CL <- function(){
 
 Rcmdr.graph.VAR <- function(){
   
-  initializeDialog(title=gettextRcmdr("Display variability"))
+  initializeDialog(title=c("Display variability"))
 
   selectionFrame <- tkframe(top)
 
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
 
-  varBox <- variableListBox(selectionFrame, variableList= c("Range lines", "Range bars", "Trended range"), listHeight=4, title=gettextRcmdr("Select the measure of variability."))
+  varBox <- variableListBox(selectionFrame, variableList= c("Range lines", "Range bars", "Trended range"), listHeight=4, title=c("Select the measure of variability."))
 
   clFrame <- tkframe(top)
 
-  clBox <- variableListBox(clFrame, variableList= c("Mean", "Median", "Broadened median", "Trimmed mean", "M-estimator"), listHeight=4, title=gettextRcmdr("Select the measure of central tendency"))
-
-  getDataFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("dataFile", justDoIt(command))  
-    tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
-    if (dataFile == "") return();
-  }
+  clBox <- variableListBox(clFrame, variableList= c("Mean", "Median", "Broadened median", "Trimmed mean", "M-estimator"), listHeight=4, title=c("Select the measure of central tendency"))
 
   onOK <- function(){
 
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -317,7 +293,7 @@ Rcmdr.graph.VAR <- function(){
 
     var <- getSelection(varBox)
     if (length(var) == 0){
-      errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select a measure of variability."))
+      errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select a measure of variability."))
       return()
     }
     if (var == "Range lines") {VAR <- paste("\"RL\"")}
@@ -326,7 +302,7 @@ Rcmdr.graph.VAR <- function(){
 
     cl <- getSelection(clBox)
     if (length(cl) == 0){
-      errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select a measure of central tendency."))
+      errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select a measure of central tendency."))
       return()
     }
     if (cl == "Mean") {CL <- paste("\"mean\"")}
@@ -338,7 +314,7 @@ Rcmdr.graph.VAR <- function(){
     trim <- tclvalue(trimVariable)
     if (cl == "Trimmed Mean"){
       if (trim == ""){
-        errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must indicate the % of observations to be removed from the end of the distribution."))
+        errorCondition(recall=Rcmdr.graph.VAR, message=c("You must indicate the % of observations to be removed from the end of the distribution."))
         return()
       }
     }
@@ -347,7 +323,7 @@ Rcmdr.graph.VAR <- function(){
     mest <- tclvalue(mestVariable)
     if (cl == "M-estimator"){
       if (mest == ""){
-        errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must indicate the value for the constant K."))
+        errorCondition(recall=Rcmdr.graph.VAR, message=c("You must indicate the value for the constant K."))
         return()
       }
     }
@@ -363,14 +339,14 @@ Rcmdr.graph.VAR <- function(){
       if (dat == "active") {
 	.activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select an active data set."))
           return()
         }
         command <- paste("graph.VAR(design = ",design, ", VAR = ",VAR, ", dataset = ",dataset, ", data = ", .activeDataSet, ")", sep="")
       }
       if (dat == "load") {
         if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select a data file."))
+          errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select a data file."))
           return()
         }
         command <- paste("graph.VAR(design = ",design, ", VAR = ",VAR, ", dataset = ",dataset, ", data = read.table(dataFile))", sep="")
@@ -382,14 +358,14 @@ Rcmdr.graph.VAR <- function(){
         if (dat == "active") {
 	  .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.VAR(design = ",design, ", VAR = ",VAR, ", dataset = ",dataset, ", CL = ",CL, ", data = ", .activeDataSet, ")", sep="")
         }
         if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.VAR(design = ",design, ", VAR = ",VAR, ", dataset = ",dataset, ", CL = ",CL, ", data = read.table(dataFile))", sep="")
@@ -399,14 +375,14 @@ Rcmdr.graph.VAR <- function(){
         if (dat == "active") {
 	  .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.VAR(design = ",design, ", VAR = ",VAR, ", dataset = ",dataset, ", CL = ",CL, ", tr = ",trim, ", data = ", .activeDataSet, ")", sep="")
         }
         if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.VAR(design = ",design, ", VAR = ",VAR, ", dataset = ",dataset, ", CL = ",CL, ", tr = ",trim, ", data = read.table(dataFile))", sep="")
@@ -416,14 +392,14 @@ Rcmdr.graph.VAR <- function(){
         if (dat == "active") {
 	  .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.VAR(design = ",design, ", VAR = ",VAR, ", dataset = ",dataset, ", CL = ",CL, ", tr = ",mest, ", data = ", .activeDataSet, ")", sep="")
         }
         if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.VAR, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.VAR, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.VAR(design = ",design, ", VAR = ",VAR, ", dataset = ",dataset, ", CL = ",CL, ", tr = ",mest, ", data = read.table(dataFile))", sep="")
@@ -451,7 +427,7 @@ Rcmdr.graph.VAR <- function(){
   datFrame <- tkframe(top)
 
   dataFrame <- tkframe(datFrame)
-  radioButtons(dataFrame, name="dataFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title=gettextRcmdr("Select the data file"))
+  radioButtons(dataFrame, name="dataFile", buttons = c("active"), labels = c(c("Use the active data set")), title=c("Select the data file"))
 
   buttonFrame <- tkframe(datFrame)
 
@@ -463,14 +439,14 @@ Rcmdr.graph.VAR <- function(){
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
  
-  tkgrid(labelRcmdr(top, text=gettextRcmdr("                                          For range bars:"), fg="blue"), sticky = "w")
+  tkgrid(labelRcmdr(top, text=c("                                          For range bars:"), fg="blue"), sticky = "w")
 
-  tkgrid(labelRcmdr(trimFrame, text=gettextRcmdr("For trimmed mean:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(trimFrame, text=gettextRcmdr("% of observations to be removed: ")), trimField, sticky="w")
+  tkgrid(labelRcmdr(trimFrame, text=c("For trimmed mean:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(trimFrame, text=c("% of observations to be removed: ")), trimField, sticky="w")
   tkgrid(trimField, sticky="w")
   tkgrid(labelRcmdr(constantFrame, text=""))
-  tkgrid(labelRcmdr(mestFrame, text=gettextRcmdr("For M-estimator:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(mestFrame, text=gettextRcmdr("Value for the constant K: ")), mestField, sticky="w")
+  tkgrid(labelRcmdr(mestFrame, text=c("For M-estimator:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(mestFrame, text=c("Value for the constant K: ")), mestField, sticky="w")
   tkgrid(mestField, sticky="w")
   tkgrid(trimFrame, sticky = "nw")
   tkgrid(mestFrame, sticky = "nw")
@@ -479,14 +455,13 @@ Rcmdr.graph.VAR <- function(){
   tkgrid(labelRcmdr(top, text=""))
  
   tkgrid(dataFileFrame, sticky="w")
-  tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
+  
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getDataFile), sticky="w")
   tkgrid(dataFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
   
-  tkgrid(labelRcmdr(optionsFrame, text=gettextRcmdr("Remove the extreme values")), dataSetCheckBox, sticky="w")
+  tkgrid(labelRcmdr(optionsFrame, text=c("Remove the extreme values")), dataSetCheckBox, sticky="w")
   tkgrid(optionsFrame, sticky="w")
   tkgrid(labelRcmdr(top, text=""))
   
@@ -500,30 +475,23 @@ Rcmdr.graph.VAR <- function(){
 
 Rcmdr.graph.TREND <- function(){
   
-  initializeDialog(title=gettextRcmdr("Display trend"))
+  initializeDialog(title=c("Display trend"))
 
   selectionFrame <- tkframe(top)
 
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
 
-  trendBox <- variableListBox(selectionFrame, variableList= c("Vertical line plot", "Trend lines (Least Squares regression)", "Trend lines (Split-middle)", "Trend lines (Resistant trend line fitting)", "Running medians (batch size 3)", "Running medians (batch size 5)", "Running medians (batch size 4 averaged by pairs)"), listHeight=4, title=gettextRcmdr("Select the trend visualization"))
+  trendBox <- variableListBox(selectionFrame, variableList= c("Vertical line plot", "Trend lines (Least Squares regression)", "Trend lines (Split-middle)", "Trend lines (Resistant trend line fitting)", "Running medians (batch size 3)", "Running medians (batch size 5)", "Running medians (batch size 4 averaged by pairs)"), listHeight=4, title=c("Select the trend visualization"))
 
   clFrame <- tkframe(top)
 
-  clBox <- variableListBox(clFrame, variableList= c("Mean", "Median", "Broadened median", "Trimmed mean", "M-estimator"), listHeight=4, title=gettextRcmdr("Select the measure of central tendency"))
-
-  getDataFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("dataFile", justDoIt(command))  
-    tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
-    if (dataFile == "") return();
-  }
+  clBox <- variableListBox(clFrame, variableList= c("Mean", "Median", "Broadened median", "Trimmed mean", "M-estimator"), listHeight=4, title=c("Select the measure of central tendency"))
 
   onOK <- function(){
 
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -536,7 +504,7 @@ Rcmdr.graph.TREND <- function(){
 
     trend <- getSelection(trendBox)
     if (length(trend) == 0){
-      errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select a trend visualization."))
+      errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select a trend visualization."))
       return()
     }
     if (trend == "Vertical line plot") {TREND <- paste("\"VLP\"")}
@@ -549,7 +517,7 @@ Rcmdr.graph.TREND <- function(){
 
     cl <- getSelection(clBox)
     if (length(cl) == 0){
-      errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select a measure of central tendency."))
+      errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select a measure of central tendency."))
       return()
     }
     if (cl == "Mean") {CL <- paste("\"mean\"")}
@@ -561,7 +529,7 @@ Rcmdr.graph.TREND <- function(){
     trim <- tclvalue(trimVariable)
     if (cl == "Trimmed Mean"){
       if (trim == ""){
-        errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must indicate the % of observations to be removed from the end of the distribution."))
+        errorCondition(recall=Rcmdr.graph.TREND, message=c("You must indicate the % of observations to be removed from the end of the distribution."))
         return()
       }
     }
@@ -570,7 +538,7 @@ Rcmdr.graph.TREND <- function(){
     mest <- tclvalue(mestVariable)
     if (cl == "M-estimator"){
       if (mest == ""){
-        errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must indicate the value for the constant K."))
+        errorCondition(recall=Rcmdr.graph.TREND, message=c("You must indicate the value for the constant K."))
         return()
       }
     }
@@ -582,14 +550,14 @@ Rcmdr.graph.TREND <- function(){
       if (dat == "active") {
 	.activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select an active data set."))
           return()
         }
         command <- paste("graph.TREND(design = ",design, ", TREND = ",TREND, ", data = ", .activeDataSet, ")", sep="")
       }
       if (dat == "load") {
         if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select a data file."))
+          errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select a data file."))
           return()
         }
         command <- paste("graph.TREND(design = ",design, ", TREND = ",TREND, ", data = read.table(dataFile))", sep="")	
@@ -601,14 +569,14 @@ Rcmdr.graph.TREND <- function(){
         if (dat == "active") {
 	  .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.TREND(design = ",design, ", TREND = ",TREND, ", CL = ",CL, ", data = ", .activeDataSet, ")", sep="")
         }
         if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.TREND(design = ",design, ", TREND = ",TREND, ", CL = ",CL, ", data = read.table(dataFile))", sep="")	
@@ -619,14 +587,14 @@ Rcmdr.graph.TREND <- function(){
         if (dat == "active") {
 	  .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.TREND(design = ",design, ", TREND = ",TREND, ", CL = ",CL, ", tr = ",trim, ", data = ", .activeDataSet, ")", sep="")
         }
         if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.TREND(design = ",design, ", TREND = ",TREND, ", CL = ",CL, ", tr = ",trim, ", data = read.table(dataFile))", sep="")	
@@ -636,14 +604,14 @@ Rcmdr.graph.TREND <- function(){
         if (dat == "active") {
 	  .activeDataSet <- ActiveDataSet()
           if (length(ActiveDataSet()) == 0){
-            errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select an active data set."))
+            errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select an active data set."))
             return()
           }
           command <- paste("graph.TREND(design = ",design, ", TREND = ",TREND, ", CL = ",CL, ", tr = ",mest, ", data = ", .activeDataSet, ")", sep="")
         }
         if (dat == "load") {
           if (exists("dataFile") == 0){
-            errorCondition(recall=Rcmdr.graph.TREND, message=gettextRcmdr("You must select a data file."))
+            errorCondition(recall=Rcmdr.graph.TREND, message=c("You must select a data file."))
             return()
           }
           command <- paste("graph.TREND(design = ",design, ", TREND = ",TREND, ", CL = ",CL, ", tr = ",mest, ", data = read.table(dataFile))", sep="")	
@@ -671,7 +639,7 @@ Rcmdr.graph.TREND <- function(){
   datFrame <- tkframe(top)
 
   dataFrame <- tkframe(datFrame)
-  radioButtons(dataFrame, name="dataFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title=gettextRcmdr("Select the data file"))
+  radioButtons(dataFrame, name="dataFile", buttons = c("active"), labels = c(c("Use the active data set")), title=c("Select the data file"))
 
   buttonFrame <- tkframe(datFrame)
 
@@ -679,14 +647,14 @@ Rcmdr.graph.TREND <- function(){
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
  
-  tkgrid(labelRcmdr(top, text=gettextRcmdr("                                          For vertical line plot:"), fg="blue"), sticky = "w")
+  tkgrid(labelRcmdr(top, text=c("                                          For vertical line plot:"), fg="blue"), sticky = "w")
 
-  tkgrid(labelRcmdr(trimFrame, text=gettextRcmdr("For trimmed mean:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(trimFrame, text=gettextRcmdr("% of observations to be removed: ")), trimField, sticky="w")
+  tkgrid(labelRcmdr(trimFrame, text=c("For trimmed mean:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(trimFrame, text=c("% of observations to be removed: ")), trimField, sticky="w")
   tkgrid(trimField, sticky="w")
   tkgrid(labelRcmdr(constantFrame, text=""))
-  tkgrid(labelRcmdr(mestFrame, text=gettextRcmdr("For M-estimator:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(mestFrame, text=gettextRcmdr("Value for the constant K: ")), mestField, sticky="w")
+  tkgrid(labelRcmdr(mestFrame, text=c("For M-estimator:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(mestFrame, text=c("Value for the constant K: ")), mestField, sticky="w")
   tkgrid(mestField, sticky="w")
   tkgrid(trimFrame, sticky = "nw")
   tkgrid(mestFrame, sticky = "nw")
@@ -695,9 +663,9 @@ Rcmdr.graph.TREND <- function(){
   tkgrid(labelRcmdr(top, text=""))
  
   tkgrid(dataFileFrame, sticky="w")
-  tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
+  
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getDataFile), sticky="w")
+
   tkgrid(dataFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
@@ -720,24 +688,17 @@ Rcmdr.graph.TREND <- function(){
 
 Rcmdr.quantity <- function(){
   
-  initializeDialog(title=gettextRcmdr("Number of possible assignments"))
-
-  selectionFrame <- tkframe(top)
-
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  initializeDialog(title=c("Number of possible assignments"))
   
-  getStartsFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("starts", justDoIt(command)) 
-    tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
-    if (starts == "") return();
-  }
-    
+  selectionFrame <- tkframe(top)
+  
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
+  
   onOK <- function(){
-   
+    
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.quantity, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.quantity, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -747,37 +708,44 @@ Rcmdr.quantity <- function(){
     if (des == "ABA Phase Design") {design <- paste("\"ABA\"")}
     if (des == "ABAB Phase Design") {design <- paste("\"ABAB\"")}
     if (des == "Multiple Baseline Design") {design <- paste("\"MBD\"")}
-
+    
     MT <- tclvalue(MTVariable)
     if (des !=  "Multiple Baseline Design") {
       if (MT == ""){
-        errorCondition(recall=Rcmdr.quantity, message=gettextRcmdr("You must indicate the number of observations."))
+        errorCondition(recall=Rcmdr.quantity, message=c("You must indicate the number of observations."))
         return()
       }
     }
     MT <- as.numeric(MT)
-
+    
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.quantity, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.quantity, message=c("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
     phase <- as.numeric(phase)
-
+    
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.quantity, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.quantity, message=c("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
     atd <- as.numeric(atd)
     
     if (des ==  "Multiple Baseline Design") {
+      
+      ###
+      command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
+      starts <- putRcmdr("starts", justDoIt(command)) 
+      if (starts == "") return();
+      ###
+      
       if (exists("starts") == 0){
-        errorCondition(recall=Rcmdr.quantity, message=gettextRcmdr("You must select a start points file."))
+        errorCondition(recall=Rcmdr.quantity, message=c("You must select a start points file."))
         return()
       }
       starts <- paste("\"", starts, "\"", sep = "")
@@ -788,20 +756,20 @@ Rcmdr.quantity <- function(){
       command <- paste("quantity(design = ", design, ", MT = ", MT, ")", sep="")}
     
     if (des == "Alternating Treatments Design") {command <- paste("quantity(design = ", design, ", MT = ", MT, ", limit = ", atd, ")", sep="")}
-
+    
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design") {command <- paste("quantity(design = ", design, ", MT = ", MT, ", limit = ", phase, ")", sep="")}
-
+    
     closeDialog()
     doItAndPrint(command)
     tkfocus(CommanderWindow())
   }
-
+  
   OKCancelHelp(helpSubject="quantity")
-
+  
   MTFrame <- tkframe(selectionFrame)
   MTVariable <- tclVar("")
   MTField <- ttkentry(MTFrame, width="6", textvariable=MTVariable)
-
+  
   limFrame <- tkframe(top)
   phaseFrame <- tkframe(limFrame)
   phaseVariable <- tclVar("")
@@ -809,38 +777,37 @@ Rcmdr.quantity <- function(){
   atdFrame <- tkframe(limFrame)
   atdVariable <- tclVar("")
   atdField <- ttkentry(atdFrame, width="6", textvariable=atdVariable)
-
+  
   startsFrame <- tkframe(top)
   
   tkgrid(labelRcmdr(MTFrame, text=""))
   tkgrid(labelRcmdr(MTFrame, text=""))
-  tkgrid(labelRcmdr(MTFrame, text=gettextRcmdr("Number of observations \n(not necessary for MBD): ")), MTField, sticky="w")
+  tkgrid(labelRcmdr(MTFrame, text=c("Number of observations \n(not necessary for MBD): ")), MTField, sticky="w")
   tkgrid(MTField, sticky="w")
   tkgrid(getFrame(designBox), labelRcmdr(selectionFrame, text = "        "), MTFrame, sticky="nw")
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("For phase designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("For alternating treatments designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("Minimum number of observations per \nphase: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(phaseFrame, text=c("For phase designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("For alternating treatments designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(phaseFrame, text=c("Minimum number of observations per \nphase: ")), sticky="w")
   tkgrid(phaseField, sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
   tkgrid(atdField, sticky="w")
   tkgrid(phaseFrame, labelRcmdr(limFrame, text = "         "), atdFrame, sticky = "nw")
   tkgrid(limFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(top, text=gettextRcmdr("Select the start points file (only for MBD)"), fg="blue"), sticky = "w")
-  tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr("Selected file: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(top, text=c("If the chosen design is a multiple baseline design, a file select window
+will appear (after clicking 'OK') where you must select the file containing the possible startpoints."), fg="blue"), sticky = "w")
   tkgrid(startsFrame, sticky="w")
-  tkgrid(tkbutton(top, text="  Select File  ", command=getStartsFile), sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(buttonsFrame)
   dialogSuffix()
-    
+  
 }
 
 ####################################
@@ -849,31 +816,17 @@ Rcmdr.quantity <- function(){
 
 Rcmdr.assignments <- function(){
   
-  initializeDialog(title=gettextRcmdr("Display all possible data arrangements"))
-
-  selectionFrame <- tkframe(top)
-
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  initializeDialog(title=c("Display all possible data arrangements"))
   
-  getStartsFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("starts", justDoIt(command))
-    tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
-    if (starts == "") return();
-  }
-
-  savefile <- function() {
-    command <- "tclvalue(tkgetSaveFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("fileName", justDoIt(command))   
-    tkgrid(labelRcmdr(saveFrame, text=gettextRcmdr(fileName)), sticky="w")
-    if (fileName == "") return();
-  }
+  selectionFrame <- tkframe(top)
+  
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
   
   onOK <- function(){
-
+    
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.assignments, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.assignments, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -883,76 +836,77 @@ Rcmdr.assignments <- function(){
     if (des == "ABA Phase Design") {design <- paste("\"ABA\"")}
     if (des == "ABAB Phase Design") {design <- paste("\"ABAB\"")}
     if (des == "Multiple Baseline Design") {design <- paste("\"MBD\"")}
-
+    
     MT <- tclvalue(MTVariable)
     if (des !=  "Multiple Baseline Design") {
       if (MT == ""){
-        errorCondition(recall=Rcmdr.assignments, message=gettextRcmdr("You must indicate the number of observations."))
+        errorCondition(recall=Rcmdr.assignments, message=c("You must indicate the number of observations."))
         return()
       }
     }
     MT <- as.numeric(MT)
-
+    
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.assignments, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.assignments, message=c("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
     phase <- as.numeric(phase)
-
+    
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.assignments, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.assignments, message=c("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
     atd <- as.numeric(atd)
-
+    
     sav <- tclvalue(saveAssignmentsVariable)
-    if (sav == "Check") {
-      save <- paste("\"check\"")
-      if (exists("fileName") == 0){
-        errorCondition(recall=Rcmdr.assignments, message=gettextRcmdr("You must select a location to save the possible assignments."))
-        return()
-      }
-      fileName <- paste("\"", fileName, "\"", sep = "")
-    }
+    if (sav == "Check") {save <- paste("\"yes\"")}
+    
     if (sav == "No") {save <- paste("\"no\"")}
-
+    
     if (des == "Multiple Baseline Design") {
+      
+      ###
+      command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
+      starts <- putRcmdr("starts", justDoIt(command))
+      if (starts == "") return();
+      ###
+      
       if (exists("starts") == 0){
-        errorCondition(recall=Rcmdr.assignments, message=gettextRcmdr("You must select a start points file."))
+        errorCondition(recall=Rcmdr.assignments, message=c("You must select a start points file."))
         return()
       }
-      starts <- paste("\"", starts, "\"", sep = "")	
+      starts <- paste("\"", starts, "\"", sep = "")  
       command <- paste("assignments(design = ", design, ", save = ", save, ", starts = ", starts, ")", sep="")
     }
-
+    
     if (des == "Completely Randomized Design" | des == "Randomized Block Design") {
       command <- paste("assignments(design = ", design, ", MT = ", MT, ", save = ", save, ")", sep="")
     }
-
+    
     if (des == "Alternating Treatments Design") {
       command <- paste("assignments(design = ", design, ", MT = ", MT, ", limit = ", atd, ", save = ", save, ")", sep="")
     }
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design") {
       command <- paste("assignments(design = ", design, ", MT = ", MT, ", limit = ", phase, ", save = ", save, ")", sep="")
     }
-
+    
     closeDialog()
     doItAndPrint(command)
     tkfocus(CommanderWindow())
   }
   
   OKCancelHelp(helpSubject="assignments")
-
+  
   MTFrame <- tkframe(selectionFrame)
   MTVariable <- tclVar("")
   MTField <- ttkentry(MTFrame, width="6", textvariable=MTVariable)
-
+  
   limFrame <- tkframe(top)
   phaseFrame <- tkframe(limFrame)
   phaseVariable <- tclVar("")
@@ -960,51 +914,52 @@ Rcmdr.assignments <- function(){
   atdFrame <- tkframe(limFrame)
   atdVariable <- tclVar("")
   atdField <- ttkentry(atdFrame, width="6", textvariable=atdVariable)
-
+  
   startsFrame <- tkframe(top)
-
+  
   savFrame <- tkframe(top)
   saveFrame <- tkframe(savFrame)
-  radioButtons(saveFrame, name="saveAssignments", buttons = c("Check", "No"), labels= gettextRcmdr(c("YES", "NO")), title=gettextRcmdr("Save the possible assignments?"))
+  radioButtons(saveFrame, name="saveAssignments", buttons = c("Check", "No"), labels= c(c("YES", "NO")), title=c("Save the possible assignments?"))
   buttonFrame <- tkframe(savFrame)
-
+  
   tkgrid(labelRcmdr(MTFrame, text=""))
   tkgrid(labelRcmdr(MTFrame, text=""))
-  tkgrid(labelRcmdr(MTFrame, text=gettextRcmdr("Number of observations \n(not necessary for MBD): ")), MTField, sticky="w")
+  tkgrid(labelRcmdr(MTFrame, text=c("Number of observations \n(not necessary for MBD): ")), MTField, sticky="w")
   tkgrid(MTField, sticky="w")
   tkgrid(getFrame(designBox), labelRcmdr(selectionFrame, text = "        "), MTFrame, sticky="nw")
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("For phase designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("For alternating treatments designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("Minimum number of observations per \nphase: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(phaseFrame, text=c("For phase designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("For alternating treatments designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(phaseFrame, text=c("Minimum number of observations per \nphase: ")), sticky="w")
   tkgrid(phaseField, sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
   tkgrid(atdField, sticky="w")
   tkgrid(phaseFrame, labelRcmdr(limFrame, text = "         "), atdFrame, sticky = "nw")
   tkgrid(limFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(saveAssignmentsFrame, sticky="w")
-  tkgrid(labelRcmdr(saveFrame, text=gettextRcmdr("    Selected location: ")), sticky="w")
+  tkgrid(labelRcmdr(saveFrame, text=c("Choose 'YES' if you want to save the possible assignments to a text file.
+In this case, a file select window will appear (after clicking 'OK').
+Create a text file to store the assignments by typing 'filename.txt'
+in the window in a folder of your choice. ")), sticky="w")
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select location  ", command=savefile), sticky="w")
   tkgrid(saveFrame, labelRcmdr(savFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(savFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
-  
-  tkgrid(labelRcmdr(top, text=gettextRcmdr("Select the start points file (only for MBD)"), fg="blue"), sticky = "w")
-  tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr("Selected file: ")), sticky="w")
+  tkgrid(labelRcmdr(top, text=c("If the chosen design is a multiple baseline design, a file select window will appear (after clicking 'OK')
+where you must select the file containing the possible startpoints. If you also chose for the assignments
+to be saved, a second window will appear where you must create a text file to store the assignments."), fg="blue"), sticky = "w")
   tkgrid(startsFrame, sticky="w")
-  tkgrid(tkbutton(top, text="  Select File  ", command=getStartsFile), sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(buttonsFrame)
   dialogSuffix()
-
+  
 }
 
 ################################
@@ -1012,25 +967,19 @@ Rcmdr.assignments <- function(){
 ################################
 
 Rcmdr.selectdesign <- function(){
-
-  initializeDialog(title=gettextRcmdr("Choose 1 data arrangement"))
-
-  selectionFrame <- tkframe(top)
-
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
   
-  getStartsFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("starts", justDoIt(command))  
-    tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
-    if (starts == "") return();
-  }
+  initializeDialog(title=c("Choose 1 data arrangement"))
+  
+  selectionFrame <- tkframe(top)
+  
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
+  
   
   onOK <- function(){
-
+    
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.selectdesign, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.selectdesign, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -1040,63 +989,61 @@ Rcmdr.selectdesign <- function(){
     if (des == "ABA Phase Design") {design <- paste("\"ABA\"")}
     if (des == "ABAB Phase Design") {design <- paste("\"ABAB\"")}
     if (des == "Multiple Baseline Design") {design <- paste("\"MBD\"")}
-
+    
     MT <- tclvalue(MTVariable)
     if (des !=  "Multiple Baseline Design") {
       if (MT == ""){
-        errorCondition(recall=Rcmdr.selectdesign, message=gettextRcmdr("You must indicate the number of observations."))
+        errorCondition(recall=Rcmdr.selectdesign, message=c("You must indicate the number of observations."))
         return()
       }
     }
     MT <- as.numeric(MT)
-
+    
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.selectdesign, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.selectdesign, message=c("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
     phase <- as.numeric(phase)
-
+    
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.selectdesign, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.selectdesign, message=c("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
     atd <- as.numeric(atd)
-
+    
     if (des == "Multiple Baseline Design"){
-      if (exists("starts") == 0){
-        errorCondition(recall=Rcmdr.selectdesign, message=gettextRcmdr("You must select a start points file."))
-        return()
-      }
-      starts <- paste("\"", starts, "\"", sep = "")
-      command <- paste("selectdesign(design = ", design, ", starts = ", starts, ")", sep="")
+      
+      command <- paste("selectdesign(design = ", design,")", sep="")
+      
     }
     if (des == "Completely Randomized Design" | des == "Randomized Block Design"){
-           command <- paste("selectdesign(design = ", design, ", MT = ", MT, ")", sep="")
-    }	
+      command <- paste("selectdesign(design = ", design, ", MT = ", MT, ")", sep="")
+    }  
     if (des == "Alternating Treatments Design"){
-          command <- paste("selectdesign(design = ", design, ", MT = ", MT, ", limit = ", atd, ")", sep="")
+      command <- paste("selectdesign(design = ", design, ", MT = ", MT, ", limit = ", atd, ")", sep="")
     }
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
-          command <- paste("selectdesign(design = ", design, ", MT = ", MT, ", limit = ", phase, ")", sep="")
+      command <- paste("selectdesign(design = ", design, ", MT = ", MT, ", limit = ", phase, ")", sep="")
     }
-
+    
     closeDialog()
     doItAndPrint(command)
     tkfocus(CommanderWindow())
+    
   }
   
   OKCancelHelp(helpSubject="selectdesign")
-
+  
   MTFrame <- tkframe(selectionFrame)
   MTVariable <- tclVar("")
   MTField <- ttkentry(MTFrame, width="6", textvariable=MTVariable)
-
+  
   limFrame <- tkframe(top)
   phaseFrame <- tkframe(limFrame)
   phaseVariable <- tclVar("")
@@ -1104,35 +1051,34 @@ Rcmdr.selectdesign <- function(){
   atdFrame <- tkframe(limFrame)
   atdVariable <- tclVar("")
   atdField <- ttkentry(atdFrame, width="6", textvariable=atdVariable)
-
+  
   startsFrame <- tkframe(top)
   
   tkgrid(labelRcmdr(MTFrame, text=""))
   tkgrid(labelRcmdr(MTFrame, text=""))
-  tkgrid(labelRcmdr(MTFrame, text=gettextRcmdr("Number of observations \n(not necessary for MBD): ")), MTField, sticky="w")
+  tkgrid(labelRcmdr(MTFrame, text=c("Number of observations \n(not necessary for MBD): ")), MTField, sticky="w")
   tkgrid(MTField, sticky="w")
   tkgrid(getFrame(designBox), labelRcmdr(selectionFrame, text = "        "), MTFrame, sticky="nw")
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("For phase designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("For alternating treatments designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("Minimum number of observations per \nphase: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(phaseFrame, text=c("For phase designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("For alternating treatments designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(phaseFrame, text=c("Minimum number of observations per \nphase: ")), sticky="w")
   tkgrid(phaseField, sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
   tkgrid(atdField, sticky="w")
   tkgrid(phaseFrame, labelRcmdr(limFrame, text = "         "), atdFrame, sticky = "nw")
   tkgrid(limFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(top, text=gettextRcmdr("Select the start points file (only for MBD)"), fg="blue"), sticky = "w")
-  tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr("Selected file: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(top, text=c("If the chosen design is a multiple baseline design, a file select window will appear (after clicking 'OK')
+where you must select the file containing the possible startpoints."), fg="blue"), sticky = "w")
   tkgrid(startsFrame, sticky="w")
-  tkgrid(tkbutton(top, text="  Select File  ", command=getStartsFile), sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(buttonsFrame)
   dialogSuffix()
   
@@ -1148,26 +1094,20 @@ Rcmdr.selectdesign <- function(){
 
 Rcmdr.observed <- function(){
   
-  initializeDialog(title=gettextRcmdr("Observed test statistic"))
-
+  initializeDialog(title=c("Observed test statistic"))
+  
   selectionFrame <- tkframe(top)
   
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
   
-  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=gettextRcmdr("Select the test statistic"))
-
-  getDataFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("dataFile", justDoIt(command)) 
-    tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
-    if (dataFile == "") return();
-  }
+  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
+  
   
   onOK <- function(){
-
+    
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.observed, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.observed, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -1180,7 +1120,7 @@ Rcmdr.observed <- function(){
     
     stat <- getSelection(statisticBox)
     if (length(stat) == 0){
-      errorCondition(recall=Rcmdr.observed, message=gettextRcmdr("You must select a test statistic."))
+      errorCondition(recall=Rcmdr.observed, message=c("You must select a test statistic."))
       return()
     }
     if (stat == "A-B") {statistic <- paste("\"A-B\"")}
@@ -1192,22 +1132,22 @@ Rcmdr.observed <- function(){
     if (stat == "AA-BB (only for ABA and ABAB)") {statistic <- paste("\"AA-BB\"")}
     if (stat == "BB-AA (only for ABA and ABAB)") {statistic <- paste("\"BB-AA\"")}
     if (stat == "|AA-BB| (only for ABA and ABAB)") {statistic <- paste("\"|AA-BB|\"")}
-
+    
     dat <- tclvalue(dataFileVariable)
     if (dat == "active") {
-	.activeDataSet <- ActiveDataSet()
-        if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.observed, message=gettextRcmdr("You must select an active data set."))
-          return()
-        }
-        command <- paste("observed(design = ",design, ", statistic = ",statistic, ", data = ", .activeDataSet, ")", sep="")
+      .activeDataSet <- ActiveDataSet()
+      if (length(ActiveDataSet()) == 0){
+        errorCondition(recall=Rcmdr.observed, message=c("You must select an active data set."))
+        return()
+      }
+      command <- paste("observed(design = ",design, ", statistic = ",statistic, ", data = ", .activeDataSet, ")", sep="")
     }
     if (dat == "load") {
-        if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.observed, message=gettextRcmdr("You must select a data file."))
-          return()
-        }
-        command <- paste("observed(design = ",design, ", statistic = ",statistic, ", data = read.table(dataFile))", sep="")
+      if (exists("dataFile") == 0){
+        errorCondition(recall=Rcmdr.observed, message=c("You must select a data file."))
+        return()
+      }
+      command <- paste("observed(design = ",design, ", statistic = ",statistic, ", data = read.table(dataFile))", sep="")
     }
     
     closeDialog()
@@ -1216,26 +1156,24 @@ Rcmdr.observed <- function(){
   }
   
   OKCancelHelp(helpSubject="observed")
-
+  
   datFrame <- tkframe(top)
-
+  
   dataFrame <- tkframe(datFrame)
-  radioButtons(dataFrame, name="dataFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title=gettextRcmdr("Select the data file"))
-
+  radioButtons(dataFrame, name="dataFile", buttons = c("active"), labels = c(c("Use the active data set")), title=c("Select the data file"))
+  
   buttonFrame <- tkframe(datFrame)
-
+  
   tkgrid(getFrame(designBox), labelRcmdr(selectionFrame, text = "        "), getFrame(statisticBox), sticky="nw")
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(dataFileFrame, sticky="w")
-  tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getDataFile), sticky="w")
   tkgrid(dataFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(buttonsFrame)  
   dialogSuffix()
 }
@@ -1245,41 +1183,20 @@ Rcmdr.observed <- function(){
 ##############################
 
 Rcmdr.distribution <- function(){
-
-  initializeDialog(title=gettextRcmdr("Randomization distribution"))
-
+  
+  initializeDialog(title=c("Randomization distribution"))
+  
   selectionFrame <- tkframe(top)
   
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
   
-  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=gettextRcmdr("Select the test statistic"))
-
-  getDataFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("dataFile", justDoIt(command))  
-    tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
-    if (dataFile == "") return();
-  }
- 
-  getStartsFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("starts", justDoIt(command))  
-    tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
-    if (starts == "") return();
-  }
-
-  savefile <- function() {
-    command <- "tclvalue(tkgetSaveFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("fileName", justDoIt(command))   
-    tkgrid(labelRcmdr(saveFrame, text=gettextRcmdr(fileName)), sticky="w")
-    if (fileName == "") return();
-  }
-
+  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
+  
   onOK <- function(){
-
+    
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.distribution, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -1289,10 +1206,10 @@ Rcmdr.distribution <- function(){
     if (des == "ABA Phase Design") {design <- paste("\"ABA\"")}
     if (des == "ABAB Phase Design") {design <- paste("\"ABAB\"")}
     if (des == "Multiple Baseline Design") {design <- paste("\"MBD\"")}
-
+    
     stat <- getSelection(statisticBox)
     if (length(stat) == 0){
-      errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a test statistic."))
+      errorCondition(recall=Rcmdr.distribution, message=c("You must select a test statistic."))
       return()
     }
     if (stat == "A-B") {statistic <- paste("\"A-B\"")}
@@ -1304,22 +1221,22 @@ Rcmdr.distribution <- function(){
     if (stat == "AA-BB (only for ABA and ABAB)") {statistic <- paste("\"AA-BB\"")}
     if (stat == "BB-AA (only for ABA and ABAB)") {statistic <- paste("\"BB-AA\"")}
     if (stat == "|AA-BB| (only for ABA and ABAB)") {statistic <- paste("\"|AA-BB|\"")}
-
+    
     distr <- tclvalue(distributionVariable)
-
+    
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.distribution, message=c("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
     phase <- as.numeric(phase)
-
+    
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.distribution, message=c("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
@@ -1327,36 +1244,37 @@ Rcmdr.distribution <- function(){
     
     number <- tclvalue(numberVariable)
     if (distr == "mc"){
-    if (number == ""){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must indicate the number of randomizations."))
+      if (number == ""){
+        errorCondition(recall=Rcmdr.distribution, message=c("You must indicate the number of randomizations."))
         return()
       }
     }
     number <- as.numeric(number)
     
     sav <- tclvalue(saveAssignmentsVariable)
-    if (sav == "Check") {
-      save <- paste("\"check\"")
-      if (exists("fileName") == 0){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a location to save the randomization distribution."))
-        return()
-      }
-      fileName <- paste("\"", fileName, "\"", sep = "")
-    }
+    if (sav == "Check") {save <- paste("\"yes\"")}
+    
     if (sav == "No") {save <- paste("\"no\"")}
-
+    
     dat <- tclvalue(dataFileVariable)
-
+    
     if (des == "Multiple Baseline Design"){
+      
+      ###
+      command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
+      starts <- putRcmdr("starts", justDoIt(command))
+      if (starts == "") return();
+      ###
+      
       if (exists("starts") == 0){
-        errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a start points file."))
+        errorCondition(recall=Rcmdr.distribution, message=c("You must select a start points file."))
         return()
       }
       starts <- paste("\"", starts, "\"", sep = "")
       if (dat == "active") {
         .activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.distribution, message=c("You must select an active data set."))
           return()
         }
         if (distr == "mc"){
@@ -1366,25 +1284,13 @@ Rcmdr.distribution <- function(){
           command <- paste("distribution.systematic(design = ", design, ", statistic = ",statistic, ", save = ", save, ", data = ", .activeDataSet, ", starts = ", starts, ")", sep="")
         }
       }
-      if (dat == "load") { 
-        if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a data file."))
-          return()
-        }
-        if (distr == "mc"){
-          command <- paste("distribution.random(design = ", design, ", statistic = ",statistic, ", number = ", number, ", save = ", save, ", data = read.table(dataFile), starts = ", starts, ")", sep="")
-        }
-        if (distr == "syst"){
-          command <- paste("distribution.systematic(design = ", design, ", statistic = ",statistic, ", save = ", save, ", data = read.table(dataFile), starts = ", starts, ")", sep="")
-        }
-      }
     }
-
+    
     if (des == "Completely Randomized Design" | des == "Randomized Block Design") {
       if (dat == "active") {
         .activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.distribution, message=c("You must select an active data set."))
           return()
         }
         if (distr == "syst"){
@@ -1394,25 +1300,14 @@ Rcmdr.distribution <- function(){
           command <- paste("distribution.random(design = ", design, ", statistic = ",statistic, ", number = ", number, ", save = ", save, ", data = ", .activeDataSet, ")", sep="")
         }
       }
-      if (dat == "load") { 
-        if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a data file."))
-          return()
-        }
-        if (distr == "syst"){
-          command <- paste("distribution.systematic(design = ", design, ", statistic = ",statistic, ", save = ", save, ", data = read.table(dataFile))", sep="")
-        }
-        if (distr == "mc"){
-          command <- paste("distribution.random(design = ", design, ", statistic = ",statistic, ", number = ", number, ", save = ", save, ", data = read.table(dataFile))", sep="")
-        }
-      }
+      
     }
-
+    
     if (des == "Alternating Treatments Design") {
       if (dat == "active") {
         .activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.distribution, message=c("You must select an active data set."))
           return()
         }
         if (distr == "syst"){
@@ -1422,25 +1317,14 @@ Rcmdr.distribution <- function(){
           command <- paste("distribution.random(design = ", design, ", statistic = ",statistic, ", limit = ", atd, ", number = ", number, ", save = ", save, ", data = ", .activeDataSet, ")", sep="")
         }
       }
-      if (dat == "load") { 
-        if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a data file."))
-          return()
-        }
-        if (distr == "syst"){
-          command <- paste("distribution.systematic(design = ", design, ", statistic = ",statistic, ", limit = ", atd, ", save = ", save, ", data = read.table(dataFile))", sep="")
-        }
-        if (distr == "mc"){
-          command <- paste("distribution.random(design = ", design, ", statistic = ",statistic, ", limit = ", atd, ", number = ", number, ",  save = ", save, ", data = read.table(dataFile))", sep="")
-        }
-      }
+      
     }
-
+    
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design") {
       if (dat == "active") {
         .activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.distribution, message=c("You must select an active data set."))
           return()
         }
         if (distr == "syst"){
@@ -1450,27 +1334,16 @@ Rcmdr.distribution <- function(){
           command <- paste("distribution.random(design = ", design, ", statistic = ",statistic, ", limit = ", phase, ", number = ", number, ", save = ", save, ", data = ", .activeDataSet, ")", sep="")
         }
       }
-      if (dat == "load") { 
-        if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.distribution, message=gettextRcmdr("You must select a data file."))
-          return()
-        }
-        if (distr == "syst"){
-          command <- paste("distribution.systematic(design = ", design, ", statistic = ",statistic, ", limit = ", phase, ", save = ", save, ", data = read.table(dataFile))", sep="")
-        }
-        if (distr == "mc"){
-          command <- paste("distribution.random(design = ", design, ", statistic = ",statistic, ", limit = ", phase, ", number = ", number, ",  save = ", save, ", data = read.table(dataFile))", sep="")
-        }
-      }
+      
     }
-
+    
     closeDialog()
     doItAndPrint(command)
     tkfocus(CommanderWindow())
   }
-
+  
   OKCancelHelp(helpSubject="distribution.systematic")
-
+  
   limFrame <- tkframe(top)
   phaseFrame <- tkframe(limFrame)
   phaseVariable <- tclVar("")
@@ -1482,47 +1355,50 @@ Rcmdr.distribution <- function(){
   randomFrame <- tkframe(top)
   
   randFrame <- tkframe(randomFrame)
- 
-  radioButtons(randFrame, name="distribution", buttons= c("syst", "mc"), labels = gettextRcmdr(c("Systematic randomization distribution", "Monte Carlo randomization distribution")), title=gettextRcmdr("Select the randomization distribution"))
-
+  
+  radioButtons(randFrame, name="distribution", buttons= c("syst", "mc"), labels = c(c("Systematic randomization distribution", "Monte Carlo randomization distribution")), title=c("Select the randomization distribution"))
+  
   numberFrame <- tkframe(randFrame)
   numberVariable <- tclVar("")
   numberField <- ttkentry(numberFrame, width="6", textvariable=numberVariable)
-
+  
   savFrame <- tkframe(randomFrame)
   saveFrame <- tkframe(savFrame)
-  radioButtons(saveFrame, name="saveAssignments", buttons= c("No", "Check"), labels = gettextRcmdr(c("NO     ", "YES     ")), title=gettextRcmdr("Save the distribution?"))
+  radioButtons(saveFrame, name="saveAssignments", buttons= c("No", "Check"), labels = c(c("NO     ", "YES     ")), title=c("Save the distribution?"))
   savbuttonFrame <- tkframe(savFrame)
-
+  
   datFrame <- tkframe(top)
   dataFrame <- tkframe(datFrame)
-  radioButtons(dataFrame, name="dataFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title=gettextRcmdr("Select the data file"))
+  radioButtons(dataFrame, name="dataFile", buttons = c("active"), labels = c(c("Use the active data set")), title=c("Select the data file"))
   buttonFrame <- tkframe(datFrame)
-
+  
   startsFrame <- tkframe(top)
-
+  
   tkgrid(getFrame(designBox), labelRcmdr(selectionFrame, text = "        "), getFrame(statisticBox), sticky="nw")
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("For phase designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("For alternating treatments designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("Minimum number of observations per \nphase: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(phaseFrame, text=c("For phase designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("For alternating treatments designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(phaseFrame, text=c("Minimum number of observations per \nphase: ")), sticky="w")
   tkgrid(phaseField, sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
   tkgrid(atdField, sticky="w")
   tkgrid(phaseFrame, labelRcmdr(limFrame, text = "         "), atdFrame, sticky = "nw")
   tkgrid(limFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(distributionFrame, sticky = "w")
-  tkgrid(labelRcmdr(numberFrame, text=gettextRcmdr("    Number of randomizations: ")), numberField, sticky = "w")
+  tkgrid(labelRcmdr(numberFrame, text=c("    Number of randomizations: ")), numberField, sticky = "w")
   tkgrid(numberFrame, sticky = "w")
   tkgrid(saveAssignmentsFrame, sticky="w")
-  tkgrid(labelRcmdr(saveFrame, text=gettextRcmdr("    Selected location: ")), sticky="w")
+  tkgrid(labelRcmdr(saveFrame, text=c("Choose 'YES' if you want to save the possible assignments to a text file.
+In this case, a file select window will appear (after clicking 'OK').
+Create a text file to store the assignments by typing 'filename.txt'
+in the window in a folder of your choice.")), sticky="w")
   tkgrid(labelRcmdr(savbuttonFrame, text=""))
-  tkgrid(tkbutton(savbuttonFrame, text="  Select location  ", command=savefile), sticky="w")
+  
   tkgrid(saveFrame, labelRcmdr(savFrame, text="  "), savbuttonFrame, sticky="w")
   tkgrid(randFrame, labelRcmdr(randomFrame, text = "      "), savFrame, sticky = "w") 
   tkgrid(randomFrame, sticky = "w") 
@@ -1530,22 +1406,24 @@ Rcmdr.distribution <- function(){
   tkgrid(labelRcmdr(top, text=""))
   
   tkgrid(dataFileFrame, sticky="w")
-  tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
+  
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getDataFile), sticky="w")
+  
   tkgrid(dataFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(top, text=gettextRcmdr("Select the start points file (only for MBD)"), fg="blue"), sticky = "w")
-  tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr("Selected file: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(top, text=c("If the chosen design is a multiple baseline design, a file select window will appear (after clicking 'OK')
+where you must select the file containing the possible startpoints. If you also chose for the assignments
+to be saved, a second window will appear where you must create a text file to store the assignments."), fg="blue"), sticky = "w")
+  
   tkgrid(startsFrame, sticky="w")
-  tkgrid(tkbutton(top, text="  Select File  ", command=getStartsFile), sticky = "w")
+  
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(buttonsFrame, sticky = "w")
   dialogSuffix()
-
+  
 }
 
 ###########
@@ -1553,34 +1431,20 @@ Rcmdr.distribution <- function(){
 ###########
 
 Rcmdr.pvalue <- function(){
-
-  initializeDialog(title=gettextRcmdr("P-value"))
-
+  
+  initializeDialog(title=c("P-value"))
+  
   selectionFrame <- tkframe(top)
   
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
   
-  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=gettextRcmdr("Select the test statistic"))
-
-  getDataFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("dataFile", justDoIt(command))  
-    tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
-    if (dataFile == "") return();
-  }
- 
-  getStartsFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("starts", justDoIt(command))
-    tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr(starts)), sticky="w")
-    if (starts == "") return();
-  }
-
+  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
+  
   onOK <- function(){
-
+    
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.pvalue, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -1590,10 +1454,10 @@ Rcmdr.pvalue <- function(){
     if (des == "ABA Phase Design") {design <- paste("\"ABA\"")}
     if (des == "ABAB Phase Design") {design <- paste("\"ABAB\"")}
     if (des == "Multiple Baseline Design") {design <- paste("\"MBD\"")}
-
+    
     stat <- getSelection(statisticBox)
     if (length(stat) == 0){
-      errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a test statistic."))
+      errorCondition(recall=Rcmdr.pvalue, message=c("You must select a test statistic."))
       return()
     }
     if (stat == "A-B") {statistic <- paste("\"A-B\"")}
@@ -1605,60 +1469,56 @@ Rcmdr.pvalue <- function(){
     if (stat == "AA-BB (only for ABA and ABAB)") {statistic <- paste("\"AA-BB\"")}
     if (stat == "BB-AA (only for ABA and ABAB)") {statistic <- paste("\"BB-AA\"")}
     if (stat == "|AA-BB| (only for ABA and ABAB)") {statistic <- paste("\"|AA-BB|\"")}
-
+    
     distr <- tclvalue(distributionVariable)
-
+    
     phase <- tclvalue(phaseVariable)
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design"){
       if (phase == ""){
-        errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must indicate the minimum number of observations per phase."))
+        errorCondition(recall=Rcmdr.pvalue, message=c("You must indicate the minimum number of observations per phase."))
         return()
       }
     }
     phase <- as.numeric(phase)
-
+    
     atd <- tclvalue(atdVariable)
     if (des == "Alternating Treatments Design"){
       if (atd == ""){
-        errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must indicate the maximum number of consecutive administrations of the same condition."))
+        errorCondition(recall=Rcmdr.pvalue, message=c("You must indicate the maximum number of consecutive administrations of the same condition."))
         return()
       }
     }
     atd <- as.numeric(atd)
-
+    
     number <- tclvalue(numberVariable)
     if (distr == "mc"){
-    if (number == ""){
-        errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must indicate the number of randomizations."))
+      if (number == ""){
+        errorCondition(recall=Rcmdr.pvalue, message=c("You must indicate the number of randomizations."))
         return()
       }
     }
     number <- as.numeric(number)
     
     dat <- tclvalue(dataFileVariable)
-
+    
     if (des == "Multiple Baseline Design"){
-      if (exists("starts") == 0){
-        errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a start points file."))
-        return()
-      }
-      starts <- paste("\"", starts, "\"", sep = "")
+      
       if (dat == "active") {
         .activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.pvalue, message=c("You must select an active data set."))
           return()
         }
         if (distr == "mc"){
-          command <- paste("pvalue.random(design = ", design, ", statistic = ",statistic, ", number = ", number, ", data = ", .activeDataSet, ", starts = ", starts, ")", sep="")
+          command <- paste("pvalue.random(design = ", design, ", statistic = ",statistic, ", number = ", number, ", data = ", .activeDataSet, ")", sep="")
         }
         if (distr == "syst"){
-          command <- paste("pvalue.systematic(design = ", design, ", statistic = ",statistic, ", data = ", .activeDataSet, ", starts = ", starts, ")", sep="")
+          command <- paste("pvalue.systematic(design = ", design, ", statistic = ",statistic, ", data = ", .activeDataSet, ")", sep="")
         }
       }
       if (dat == "load") { 
         if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a data file."))
+          errorCondition(recall=Rcmdr.pvalue, message=c("You must select a data file."))
           return()
         }
         if (distr == "mc"){
@@ -1669,12 +1529,12 @@ Rcmdr.pvalue <- function(){
         }
       }
     }
-
+    
     if (des == "Completely Randomized Design" | des == "Randomized Block Design") {
       if (dat == "active") {
         .activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.pvalue, message=c("You must select an active data set."))
           return()
         }
         if (distr == "syst"){
@@ -1686,7 +1546,7 @@ Rcmdr.pvalue <- function(){
       }
       if (dat == "load") { 
         if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a data file."))
+          errorCondition(recall=Rcmdr.pvalue, message=c("You must select a data file."))
           return()
         }
         if (distr == "syst"){
@@ -1697,12 +1557,12 @@ Rcmdr.pvalue <- function(){
         }
       }
     }
-
+    
     if (des == "Alternating Treatments Design") {
       if (dat == "active") {
         .activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.pvalue, message=c("You must select an active data set."))
           return()
         }
         if (distr == "syst"){
@@ -1714,7 +1574,7 @@ Rcmdr.pvalue <- function(){
       }
       if (dat == "load") { 
         if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a data file."))
+          errorCondition(recall=Rcmdr.pvalue, message=c("You must select a data file."))
           return()
         }
         if (distr == "syst"){
@@ -1725,12 +1585,12 @@ Rcmdr.pvalue <- function(){
         }
       }
     }
-
+    
     if (des == "AB Phase Design" | des == "ABA Phase Design" | des == "ABAB Phase Design") {
       if (dat == "active") {
         .activeDataSet <- ActiveDataSet()
         if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select an active data set."))
+          errorCondition(recall=Rcmdr.pvalue, message=c("You must select an active data set."))
           return()
         }
         if (distr == "syst"){
@@ -1742,7 +1602,7 @@ Rcmdr.pvalue <- function(){
       }
       if (dat == "load") { 
         if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.pvalue, message=gettextRcmdr("You must select a data file."))
+          errorCondition(recall=Rcmdr.pvalue, message=c("You must select a data file."))
           return()
         }
         if (distr == "syst"){
@@ -1753,14 +1613,14 @@ Rcmdr.pvalue <- function(){
         }
       }
     }
-
+    
     closeDialog()
     doItAndPrint(command)
     tkfocus(CommanderWindow())
   }
-
+  
   OKCancelHelp(helpSubject="pvalue.systematic")
-
+  
   limFrame <- tkframe(top)
   phaseFrame <- tkframe(limFrame)
   phaseVariable <- tclVar("")
@@ -1768,61 +1628,62 @@ Rcmdr.pvalue <- function(){
   atdFrame <- tkframe(limFrame)
   atdVariable <- tclVar("")
   atdField <- ttkentry(atdFrame, width="6", textvariable=atdVariable)
-
+  
   randomFrame <- tkframe(top)
-
-  radioButtons(randomFrame, name="distribution", buttons= c("syst", "mc"), labels = gettextRcmdr(c("Systematic randomization distribution", "Monte Carlo randomization distribution")), title=gettextRcmdr("Select the randomization distribution"))
-
+  
+  radioButtons(randomFrame, name="distribution", buttons= c("syst", "mc"), labels = c(c("Systematic randomization distribution", "Monte Carlo randomization distribution")), title=c("Select the randomization distribution"))
+  
   numberFrame <- tkframe(randomFrame)
   numberVariable <- tclVar("")
   numberField <- ttkentry(numberFrame, width="6", textvariable=numberVariable)
-
+  
   datFrame <- tkframe(top)
   dataFrame <- tkframe(datFrame)
-  radioButtons(dataFrame, name="dataFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title=gettextRcmdr("Select the data file"))
+  radioButtons(dataFrame, name="dataFile", buttons = c("active"), labels = c(c("Use the active data set")), title=c("Select the data file"))
   buttonFrame <- tkframe(datFrame)
-
+  
   startsFrame <- tkframe(top)
-
+  
   tkgrid(getFrame(designBox), labelRcmdr(selectionFrame, text = "        "), getFrame(statisticBox), sticky="nw")
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("For phase designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("For alternating treatments designs:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(phaseFrame, text=gettextRcmdr("Minimum number of observations per \nphase: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(phaseFrame, text=c("For phase designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("For alternating treatments designs:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(phaseFrame, text=c("Minimum number of observations per \nphase: ")), sticky="w")
   tkgrid(phaseField, sticky="w")
-  tkgrid(labelRcmdr(atdFrame, text=gettextRcmdr("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
+  tkgrid(labelRcmdr(atdFrame, text=c("Maximum number of consecutive administrations \nof the same condition: ")), sticky="w")
   tkgrid(atdField, sticky="w")
   tkgrid(phaseFrame, labelRcmdr(limFrame, text = "         "), atdFrame, sticky = "nw")
   tkgrid(limFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(numberFrame, text=gettextRcmdr("For the Monte Carlo distribution:"), fg="blue"), sticky="w")
-  tkgrid(labelRcmdr(numberFrame, text=gettextRcmdr("Number of randomizations: ")), numberField, sticky = "w")
+  
+  tkgrid(labelRcmdr(numberFrame, text=c("For the Monte Carlo distribution:"), fg="blue"), sticky="w")
+  tkgrid(labelRcmdr(numberFrame, text=c("Number of randomizations: ")), numberField, sticky = "w")
   tkgrid(distributionFrame, labelRcmdr(randomFrame, text = "  "), numberFrame, sticky = "w")
   tkgrid(randomFrame, sticky = "w") 
   tkgrid(labelRcmdr(top, text=""))
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(dataFileFrame, sticky="w")
-  tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
+  
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getDataFile), sticky="w")
+  
   tkgrid(dataFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
-
-  tkgrid(labelRcmdr(top, text=gettextRcmdr("Select the start points file (only for MBD)"), fg="blue"), sticky = "w")
-  tkgrid(labelRcmdr(startsFrame, text=gettextRcmdr("Selected file: ")), sticky="w")
+  
+  tkgrid(labelRcmdr(top, text=c("If the chosen design is a multiple baseline design, a file select window will appear (after clicking 'OK')
+where you must select the file containing the possible startpoints."), fg="blue"), sticky = "w")
+  
   tkgrid(startsFrame, sticky="w")
-  tkgrid(tkbutton(top, text="  Select File  ", command=getStartsFile), sticky = "w")
+  
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(buttonsFrame, sticky = "w")
   dialogSuffix()
-
+  
 }
 
 ########################################################################################################
@@ -1835,26 +1696,19 @@ Rcmdr.pvalue <- function(){
 
 Rcmdr.ES <- function(){
   
-  initializeDialog(title=gettextRcmdr("Effect size"))
-
-  selectionFrame <- tkframe(top)
-
-  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=gettextRcmdr("Select the design type"))
+  initializeDialog(title=c("Effect size"))
   
-  esBox <- variableListBox(selectionFrame, variableList= c("Standardized Mean Difference", "Pooled Standardized Mean Difference", "PND (expected increase)", "PND (expected decrease)", "PEM (expected increase)", "PEM (expected decrease)"), listHeight=4, title=gettextRcmdr("Select the effect size measure"))
-
-  getDataFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("dataFile", justDoIt(command))  
-    tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr(dataFile)), sticky="w")
-    if (dataFile == "") return();
-  }
+  selectionFrame <- tkframe(top)
+  
+  designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
+  
+  esBox <- variableListBox(selectionFrame, variableList= c("Standardized Mean Difference", "Pooled Standardized Mean Difference", "PND (expected increase)", "PND (expected decrease)", "PEM (expected increase)", "PEM (expected decrease)"), listHeight=4, title=c("Select the effect size measure"))
   
   onOK <- function(){
-
+    
     des <- getSelection(designBox)
     if (length(des) == 0){
-      errorCondition(recall=Rcmdr.ES, message=gettextRcmdr("You must select a design type."))
+      errorCondition(recall=Rcmdr.ES, message=c("You must select a design type."))
       return()
     }
     if (des == "Completely Randomized Design") {design <- paste("\"CRD\"")}
@@ -1864,10 +1718,10 @@ Rcmdr.ES <- function(){
     if (des == "ABA Phase Design") {design <- paste("\"ABA\"")}
     if (des == "ABAB Phase Design") {design <- paste("\"ABAB\"")}
     if (des == "Multiple Baseline Design") {design <- paste("\"MBD\"")}
-
+    
     es <- getSelection(esBox)
     if (length(es) == 0){
-      errorCondition(recall=Rcmdr.ES, message=gettextRcmdr("You must select an effect size measure."))
+      errorCondition(recall=Rcmdr.ES, message=c("You must select an effect size measure."))
       return()
     }
     if (es == "Standardized Mean Difference") {ES <- paste("\"SMD\"")}
@@ -1876,22 +1730,15 @@ Rcmdr.ES <- function(){
     if (es == "PND (expected decrease)") {ES <- paste("\"PND-\"")}
     if (es == "PEM (expected increase)") {ES <- paste("\"PEM+\"")}
     if (es == "PEM (expected decrease)") {ES <- paste("\"PEM-\"")}
-        
+    
     dat <- tclvalue(dataFileVariable)
-     if (dat == "active") {
-	.activeDataSet <- ActiveDataSet()
-        if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.ES, message=gettextRcmdr("You must select an active data set."))
-          return()
-        }
-        command <- paste("ES(design = ",design, ", ES = ",ES, ", data = ", .activeDataSet, ")", sep="")
-    }
-    if (dat == "load") {
-        if (exists("dataFile") == 0){
-          errorCondition(recall=Rcmdr.ES, message=gettextRcmdr("You must select a data file."))
-          return()
-        }
-        command <- paste("ES(design = ",design, ", ES = ",ES, ", data = read.table(dataFile))", sep="")
+    if (dat == "active") {
+      .activeDataSet <- ActiveDataSet()
+      if (length(ActiveDataSet()) == 0){
+        errorCondition(recall=Rcmdr.ES, message=c("You must select an active data set."))
+        return()
+      }
+      command <- paste("ES(design = ",design, ", ES = ",ES, ", data = ", .activeDataSet, ")", sep="")
     }
     
     closeDialog()
@@ -1900,29 +1747,27 @@ Rcmdr.ES <- function(){
   }
   
   OKCancelHelp(helpSubject="ES")
-
+  
   datFrame <- tkframe(top)
-
+  
   dataFrame <- tkframe(datFrame)
-  radioButtons(dataFrame, name="dataFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title=gettextRcmdr("Select the data file"))
-
+  radioButtons(dataFrame, name="dataFile", buttons = c("active"), labels = c(c("Use the active data set")), title=c("Select the data file"))
+  
   buttonFrame <- tkframe(datFrame)
-
+  
   tkgrid(getFrame(designBox), labelRcmdr(selectionFrame, text = "        "), getFrame(esBox), sticky="nw")
   tkgrid(selectionFrame, sticky = "nw")
   tkgrid(labelRcmdr(top, text=""))
-
+  
   tkgrid(dataFileFrame, sticky="w")
-  tkgrid(labelRcmdr(dataFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getDataFile), sticky="w")
   tkgrid(dataFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
   
   tkgrid(buttonsFrame)  
   dialogSuffix()
-    
+  
 }
 
 #########################
@@ -1930,38 +1775,25 @@ Rcmdr.ES <- function(){
 #########################
 
 Rcmdr.combine <- function(){
- 
-  initializeDialog(title=gettextRcmdr("Combine p-values"))
-
-  getPvalueFile <- function() {
-    command <- "tclvalue(tkgetOpenFile(filetypes='{{Text files} {.txt}} {{All files} *}'))"
-    putRcmdr("pvalueFile", justDoIt(command))   
-    tkgrid(labelRcmdr(pvalFrame, text=gettextRcmdr(pvalueFile)), sticky="w")
-    if (pvalueFile == "") return();
-  }
+  
+  initializeDialog(title=c("Combine p-values"))
   
   onOK <- function(){
-        
+    
     meth <- tclvalue(combMethodVariable)
     if (meth == "mult") {method <- paste("\"x\"")}
     if (meth == "add") {method <- paste("\"+\"")}
     
     pval <- tclvalue(pvalueFileVariable)
-      if (pval == "active") {
-	.activeDataSet <- ActiveDataSet()
-        if (length(ActiveDataSet()) == 0){
-          errorCondition(recall=Rcmdr.combine, message=gettextRcmdr("You must select an active data set."))
-          return()
-        }
-        command <- paste("combine(method = ",method, ", pvalues = ", .activeDataSet, ")", sep="")
-    }
-    if (pval == "load") {
-      if (exists("pvalueFile") == 0){
-        errorCondition(recall=Rcmdr.combine, message=gettextRcmdr("You must select a P values file."))
+    if (pval == "active") {
+      .activeDataSet <- ActiveDataSet()
+      if (length(ActiveDataSet()) == 0){
+        errorCondition(recall=Rcmdr.combine, message=c("You must select an active data set."))
         return()
       }
-        command <- paste("combine(method = ",method, ", pvalues = read.table(pvalueFile))", sep="")
+      command <- paste("combine(method = ",method, ", pvalues = ", .activeDataSet, ")", sep="")
     }
+    
     
     closeDialog()
     doItAndPrint(command)
@@ -1969,23 +1801,21 @@ Rcmdr.combine <- function(){
   }
   
   OKCancelHelp(helpSubject="combine")
-
-  radioButtons(name = "combMethod", buttons = c("mult", "add"), labels = gettextRcmdr(c("Multiplicative", "Additive")), title = gettextRcmdr("Select the combining method"))
-
+  
+  radioButtons(name = "combMethod", buttons = c("mult", "add"), labels = c(c("Multiplicative", "Additive")), title = c("Select the combining method"))
+  
   datFrame <- tkframe(top)
-
+  
   pvalFrame <- tkframe(datFrame)
-  radioButtons(pvalFrame, name = "pvalueFile", buttons = c("active", "load"), labels = gettextRcmdr(c("Use the active data set", "Use data from a text file")), title = gettextRcmdr("Select the p-values file"))
-
+  radioButtons(pvalFrame, name = "pvalueFile", buttons = c("active"), labels = c(c("Use the active data set")), title = c("Select the p-values file"))
+  
   buttonFrame <- tkframe(datFrame)
-
+  
   tkgrid(combMethodFrame, sticky="w")
   tkgrid(labelRcmdr(top, text=""))
   
   tkgrid(pvalueFileFrame, sticky="w")
-  tkgrid(labelRcmdr(pvalFrame, text=gettextRcmdr("    Selected file: ")), sticky="w")
   tkgrid(labelRcmdr(buttonFrame, text=""))
-  tkgrid(tkbutton(buttonFrame, text="  Select File  ", command=getPvalueFile), sticky="w")
   tkgrid(pvalFrame, labelRcmdr(datFrame, text="  "), buttonFrame, sticky="w")
   tkgrid(datFrame, sticky = "w")
   tkgrid(labelRcmdr(top, text=""))
