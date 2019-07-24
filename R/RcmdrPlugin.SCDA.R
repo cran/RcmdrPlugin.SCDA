@@ -1100,7 +1100,7 @@ Rcmdr.observed <- function(){
   
   designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
   
-  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
+  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
   
   
   onOK <- function(){
@@ -1129,9 +1129,6 @@ Rcmdr.observed <- function(){
     if (stat == "PA-PB (only for ABA and ABAB)") {statistic <- paste("\"PA-PB\"")}
     if (stat == "PB-PA (only for ABA and ABAB)") {statistic <- paste("\"PB-PA\"")}
     if (stat == "|PA-PB| (only for ABA and ABAB)") {statistic <- paste("\"|PA-PB|\"")}
-    if (stat == "AA-BB (only for ABA and ABAB)") {statistic <- paste("\"AA-BB\"")}
-    if (stat == "BB-AA (only for ABA and ABAB)") {statistic <- paste("\"BB-AA\"")}
-    if (stat == "|AA-BB| (only for ABA and ABAB)") {statistic <- paste("\"|AA-BB|\"")}
     
     dat <- tclvalue(dataFileVariable)
     if (dat == "active") {
@@ -1190,7 +1187,7 @@ Rcmdr.distribution <- function(){
   
   designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
   
-  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
+  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
   
   onOK <- function(){
     
@@ -1218,9 +1215,6 @@ Rcmdr.distribution <- function(){
     if (stat == "PA-PB (only for ABA and ABAB)") {statistic <- paste("\"PA-PB\"")}
     if (stat == "PB-PA (only for ABA and ABAB)") {statistic <- paste("\"PB-PA\"")}
     if (stat == "|PA-PB| (only for ABA and ABAB)") {statistic <- paste("\"|PA-PB|\"")}
-    if (stat == "AA-BB (only for ABA and ABAB)") {statistic <- paste("\"AA-BB\"")}
-    if (stat == "BB-AA (only for ABA and ABAB)") {statistic <- paste("\"BB-AA\"")}
-    if (stat == "|AA-BB| (only for ABA and ABAB)") {statistic <- paste("\"|AA-BB|\"")}
     
     distr <- tclvalue(distributionVariable)
     
@@ -1438,7 +1432,7 @@ Rcmdr.pvalue <- function(){
   
   designBox <- variableListBox(selectionFrame, variableList= c("AB Phase Design", "ABA Phase Design", "ABAB Phase Design", "Completely Randomized Design", "Alternating Treatments Design", "Randomized Block Design", "Multiple Baseline Design"), listHeight=4, title=c("Select the design type"))
   
-  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)", "AA-BB (only for ABA and ABAB)", "BB-AA (only for ABA and ABAB)", "|AA-BB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
+  statisticBox <- variableListBox(selectionFrame, variableList= c("A-B", "B-A", "|A-B|", "PA-PB (only for ABA and ABAB)", "PB-PA (only for ABA and ABAB)", "|PA-PB| (only for ABA and ABAB)"), listHeight=4, title=c("Select the test statistic"))
   
   onOK <- function(){
     
@@ -1466,9 +1460,6 @@ Rcmdr.pvalue <- function(){
     if (stat == "PA-PB (only for ABA and ABAB)") {statistic <- paste("\"PA-PB\"")}
     if (stat == "PB-PA (only for ABA and ABAB)") {statistic <- paste("\"PB-PA\"")}
     if (stat == "|PA-PB| (only for ABA and ABAB)") {statistic <- paste("\"|PA-PB|\"")}
-    if (stat == "AA-BB (only for ABA and ABAB)") {statistic <- paste("\"AA-BB\"")}
-    if (stat == "BB-AA (only for ABA and ABAB)") {statistic <- paste("\"BB-AA\"")}
-    if (stat == "|AA-BB| (only for ABA and ABAB)") {statistic <- paste("\"|AA-BB|\"")}
     
     distr <- tclvalue(distributionVariable)
     

@@ -12,8 +12,8 @@ This package provides an Rcmdr "plug-in" for the SCVA, SCRT and SCMA packages.
 \tabular{ll}{
 Package: \tab RcmdrSCDAPlugin\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2014-01-13\cr
+Version: \tab 1.2.0\cr
+Date: \tab 2019-07-01\cr
 License: \tab GPL version 2 or newer\cr
 }
 }
@@ -21,7 +21,7 @@ License: \tab GPL version 2 or newer\cr
 \author{
 Isis Bulte and Patrick Onghena
 
-Maintainer: Bart Michiels <bart.michiels@ppw.kuleuven.be>
+Maintainer: Tamal Kumar De <tamalkumar.de@kuleuven.be>
 }
 \seealso{
 \code{\link[Rcmdr]{Rcmdr}}.
